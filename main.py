@@ -14,7 +14,6 @@ app = Flask(__name__)
 @app.route("/")
 def index():
     while True:
-        print("i`ve been here")
         schedule.run_pending()
         time.sleep(1)
         return("")
@@ -48,7 +47,6 @@ vk = vk_session.get_api()
 
 
 def get_post():
-    print("and here")
     global last_post_id
     request = requests.get("https://vk.com/raspisanie_urtisi")
     bs = bs4.BeautifulSoup(request.text, "html.parser")
@@ -63,7 +61,6 @@ def get_post():
     messenge = wall_items[1].find("div", class_="pi_text")
 
     members = vk.groups.getMembers(group_id=217049074)['items']
-    print(members)
     # print(vk.wall.get(group_id="raspisanie_urtisi"))
 
     # index=2000000028
