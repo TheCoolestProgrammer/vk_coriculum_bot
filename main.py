@@ -15,7 +15,7 @@ app = Flask(__name__)
 def index():
     while True:
         schedule.run_pending()
-        time.sleep(60)
+        time.sleep(60*5)
     return("")
 def write_msg(user_id, message):
     try:
