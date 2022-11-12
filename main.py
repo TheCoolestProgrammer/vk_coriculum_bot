@@ -11,20 +11,34 @@ import schedule
 last_post_id = 0
 app = Flask(__name__)
 
-app.route("/")
+@app.route("/")
 def index():
     while True:
+        print("i`ve been here")
         schedule.run_pending()
         time.sleep(1)
         return("")
 def write_msg(user_id, message):
-    vk.messages.send(
-        # peer_id = 2000000028,
-        # peer_id="-217049074",
-        user_id=user_id,
-        random_id=get_random_id(),
-        message=message
-    )
+    try:
+        x = int(user_id)
+        vk.messages.send(
+            # peer_id = 2000000028,
+            # peer_id="-217049074",
+            user_id=x,
+            random_id=get_random_id(),
+            message=message
+        )
+    except Exception as e:
+        vk.messages.send(
+            # peer_id = 2000000028,
+            # peer_id="-217049074",
+            domain=user_id,
+            random_id=get_random_id(),
+            message=message
+        )
+
+
+
 
 
 token = "vk1.a.hORY0Zv8EEUislonOv9OilF0EGo80NXQWgxrmZJNBtyw-Ki9uajoig3bnKInXZ94S6eXuzTpkRcRv0Z4crbgQE9np7J7NOrbFEX6zCHeLA2eHz4dTRi0-CqUS4iuhtHLCV85OHAkdhYy9YXIKq4doGPt2t90Tk70phUkMLMxV5XUNea37cj__Ep4Ex2jJ-C3LE6hvliJ4YOPWX8uRuserQ"
@@ -34,6 +48,7 @@ vk = vk_session.get_api()
 
 
 def get_post():
+    print("and here")
     global last_post_id
     request = requests.get("https://vk.com/raspisanie_urtisi")
     bs = bs4.BeautifulSoup(request.text, "html.parser")
@@ -66,6 +81,7 @@ def get_post():
 
 def main():
     schedule.every(5).minutes.do(get_post)
+    # schedule.every(1).seconds.do(get_post)
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
 
