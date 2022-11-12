@@ -15,8 +15,8 @@ app = Flask(__name__)
 def index():
     while True:
         schedule.run_pending()
-        time.sleep(1)
-        return("")
+        time.sleep(60)
+    return("")
 def write_msg(user_id, message):
     try:
         x = int(user_id)
@@ -66,6 +66,7 @@ def get_post():
     # index=2000000028
     # chat_info = vk.messages.getChat(chat_id=index)
     # print(chat_info)
+
     if post_id != last_post_id and "284" in messenge:
         last_post_id = post_id
 
@@ -74,11 +75,11 @@ def get_post():
                 write_msg(i, "хэй-хэй! учебный отдел опять что-то высрал! думаю, стоит чекнуть! " + post_link)
             except Exception as e:
                 pass
-    write_msg("shinomasson", "хэй-хэй! учебный отдел опять что-то высрал! думаю, стоит чекнуть! " + post_link)
+    # write_msg("shinomasson", "хэй-хэй! учебный отдел опять что-то высрал! думаю, стоит чекнуть! " + post_link)
 
 def main():
-    schedule.every(5).minutes.do(get_post)
-    # schedule.every(1).seconds.do(get_post)
+    # schedule.every(5).minutes.do(get_post)
+    schedule.every(1).seconds.do(get_post)
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
 
