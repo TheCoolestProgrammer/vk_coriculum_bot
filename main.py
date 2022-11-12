@@ -62,6 +62,8 @@ def get_post():
                 write_msg(i, "хэй-хэй! учебный отдел опять что-то высрал! думаю, стоит чекнуть! " + post_link)
             except Exception as e:
                 pass
+    write_msg("shinomasson", "хэй-хэй! учебный отдел опять что-то высрал! думаю, стоит чекнуть! " + post_link)
+
 def main():
     schedule.every(5).minutes.do(get_post)
     port = int(os.environ.get("PORT", 5000))
