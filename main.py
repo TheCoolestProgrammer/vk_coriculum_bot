@@ -1,14 +1,22 @@
+import os
 import time
 
 import vk_api
 import bs4
 import requests
+from flask import Flask
 from vk_api.utils import get_random_id
 import schedule
 
 last_post_id = 0
+app = Flask(__name__)
 
-
+app.route("/")
+def index():
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+        return("")
 def write_msg(user_id, message):
     vk.messages.send(
         # peer_id = 2000000028,
@@ -54,9 +62,13 @@ def get_post():
                 write_msg(i, "хэй-хэй! учебный отдел опять что-то высрал! думаю, стоит чекнуть! " + post_link)
             except Exception as e:
                 pass
+def main():
+    schedule.every(5).minutes.do(get_post)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
 
-schedule.every(5).minutes.do(get_post)
-# schedule.every(100).seconds.do(get_post)
-while True:
-    schedule.run_pending()
-    time.sleep(1)
+    # schedule.every(100).seconds.do(get_post)
+
+
+if __name__ == '__main__':
+    main()
