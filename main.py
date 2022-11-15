@@ -6,7 +6,7 @@ import bs4
 import requests
 from flask import Flask
 from vk_api.utils import get_random_id
-import schedule
+from schedule import repeat, every
 
 last_post_id = 0
 app = Flask(__name__)
