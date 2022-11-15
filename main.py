@@ -16,7 +16,7 @@ def index():
     while True:
         schedule.run_pending()
         time.sleep(60*5)
-    return("")
+    return redirect(url_for('/'))
 def write_msg(user_id, message):
     try:
         x = int(user_id)
