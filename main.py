@@ -13,10 +13,8 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    while True:
-        schedule.run_pending()
-        time.sleep(60*5)
-    return redirect(url_for('/'))
+    get_post()
+    return 0
 def write_msg(user_id, message):
     try:
         x = int(user_id)
@@ -78,8 +76,9 @@ def get_post():
     # write_msg("shinomasson", "хэй-хэй! учебный отдел опять что-то высрал! думаю, стоит чекнуть! " + post_link)
 
 def main():
-    # schedule.every(5).minutes.do(get_post)
-    schedule.every(1).seconds.do(get_post)
+    schedule.every(5).minutes.do(index)
+    schedule.run_pending()
+    # schedule.every(1).seconds.do(get_post)
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
 
