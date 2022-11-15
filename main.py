@@ -11,6 +11,7 @@ from schedule import repeat, every
 last_post_id = 0
 app = Flask(__name__)
 
+test_val = 1
 @app.route("/")
 @repeat(every(5).minutes)
 def index():
