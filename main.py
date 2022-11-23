@@ -46,8 +46,8 @@ def get_post():
     x = wall_items[1].find('div', class_="wi_info").find("a")
     post_link = "https://vk.com/raspisanie_urtisi?w=" + x.attrs["href"][1:]
 
-    messenge = wall_items[1].find("div", class_="pi_text").lower()
-
+    messenge = wall_items[1].find("div", class_="pi_text")
+    messenge = str(messenge).split(">")[1].split("<")[0].lower()
     members = vk.groups.getMembers(group_id=217049074)['items']
     # print(vk.wall.get(group_id="raspisanie_urtisi"))
 
