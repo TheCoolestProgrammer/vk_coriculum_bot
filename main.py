@@ -40,47 +40,56 @@ def get_post():
     bs = bs4.BeautifulSoup(request.text, "html.parser")
 
     wall_items = bs.findAll('div', class_="wall_item")
-    x = wall_items[1].find("a")
-    post_id = int(x.attrs["name"].split("-")[1])
+    # эта проверка-костыль, я хз почему вообще могла возникнуть такая ошибка
+    if len(wall_items) >1:
+        x = wall_items[1].find("a")
+        post_id = int(x.attrs["name"].split("-")[1])
 
-    x = wall_items[1].find('div', class_="wi_info").find("a")
-    post_link = "https://vk.com/raspisanie_urtisi?w=" + x.attrs["href"][1:]
+        x = wall_items[1].find('div', class_="wi_info").find("a")
+        post_link = "https://vk.com/raspisanie_urtisi?w=" + x.attrs["href"][1:]
 
-    messenge = wall_items[1].find("div", class_="pi_text")
-    messenge = str(messenge).split(">")[1].split("<")[0].lower()
-    members = vk.groups.getMembers(group_id=217049074)['items']
-    # print(vk.wall.get(group_id="raspisanie_urtisi"))
+        messenge = wall_items[1].find("div", class_="pi_text")
+        if messenge:
+            messenge = str(messenge).split(">")[1].split("<")[0].lower()
+        else:
+            messenge=""
+        members = vk.groups.getMembers(group_id=217049074)['items']
+        # print(vk.wall.get(group_id="raspisanie_urtisi"))
 
-    # index=2000000028
-    # chat_info = vk.messages.getChat(chat_id=index)
-    # print(chat_info)
+        # index=2000000028
+        # chat_info = vk.messages.getChat(chat_id=index)
+        # print(chat_info
+        print("последнее сообщение: ",messenge)
 
-    if post_id != last_post_id:
-        last_post_id = post_id
+        if post_id != last_post_id and messenge:
+            last_post_id = post_id
+            print("найдено новое сообщение")
 
-        new_messenge=""
-        if "284" in messenge:
-            new_messenge= "хэй-хэй! учебный отдел опять что-то высрал! думаю, стоит чекнуть! "
-        if "бурумбаев" in messenge and "адил" in messenge:
-            new_messenge = "учебный отдел написал что-от об Адиле(математика\физика) "
-        elif "чуркин" in messenge:
-            new_messenge= "учебный отдел написал что-то о Чуркине(русский) "
-        elif "белобородов" in messenge:
-            new_messenge= "учебный отдел написал что-то о Белобородовой(инфа) "
-        elif "савин" in messenge:
-            new_messenge= "учебный отдел написал что-то о Савиной(общество) "
-        elif "лаврентьев" in messenge:
-            new_messenge= "учебный отдел написал что-то о Лаврентьевой(англ 2 группа) "
-        elif "шабуров" in messenge:
-            new_messenge= "учебный отдел написал что-то о Шабуровой(история) "
-        
-        if new_messenge:
-            new_messenge += post_link
-            for i in members:
-                try:
-                    write_msg(i, new_messenge)
-                except Exception as e:
-                    pass
+            new_messenge=""
+            if "284" in messenge:
+                new_messenge= "хэй-хэй! учебный отдел опять что-то высрал! думаю, стоит чекнуть! "
+            #if "бурумбаев" in messenge and ("адил" in messenge or "а.и" in messenge):
+            #    new_messenge = "учебный отдел написал что-от об Адиле(математика\физика) "
+            #elif "чуркин" in messenge:
+            #    new_messenge= "учебный отдел написал что-то о Чуркине(русский) "
+            #elif "белобородов" in messenge:
+            #    new_messenge= "учебный отдел написал что-то о Белобородовой(инфа) "
+            #elif "савин" in messenge:
+            #    new_messenge= "учебный отдел написал что-то о Савиной(общество) "
+            #elif "лаврентьев" in messenge:
+            #    new_messenge= "учебный отдел написал что-то о Лаврентьевой(англ 2 группа) "
+            #elif "шабуров" in messenge:
+            #    new_messenge= "учебный отдел написал что-то о Шабуровой(история) "
+
+            if new_messenge:
+                print("отправляю сообщения")
+                new_messenge += post_link
+                for i in members:
+                    try:
+                        write_msg(i, new_messenge)
+                    except Exception as e:
+                        pass
+                print("сообщения отправлены")
 
 if __name__ == '__main__':
     while True:
